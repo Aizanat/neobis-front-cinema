@@ -2,13 +2,13 @@ const MY_API_KEY = '375abd91-7bbd-4bba-9218-9e6a07437226'
 const API_URL_SEARCH =
   'https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword?keyword='
 const PREMIERS =
-  'https://kinopoiskapiunofficial.tech/api/v2.2/films/premieres?year=2024&month=MARCH'
+  'https://kinopoiskapiunofficial.tech/api/v2.2/films/collections?type=TOP_POPULAR_ALL&page=1'
 const TOP_AWAITS =
-  'https://kinopoiskapiunofficial.tech/api/v2.2/films/top?type=TOP_AWAIT_FILMS&page=1'
+  'https://kinopoiskapiunofficial.tech/api/v2.2/films/collections?type=TOP_POPULAR_MOVIES&page=2'
 const BEST =
-  'https://kinopoiskapiunofficial.tech/api/v2.2/films/top?type=TOP_250_BEST_FILMS&page=1'
+  'https://kinopoiskapiunofficial.tech/api/v2.2/films/collections?type=TOP_250_MOVIES&page=1'
 const RELEASES =
-  'https://kinopoiskapiunofficial.tech/api/v2.1/films/releases?year=2024&month=MARCH&page=1'
+  'https://kinopoiskapiunofficial.tech/api/v2.2/films/collections?type=CLOSES_RELEASES&page=1'
 
 // local storage
 let favorites = JSON.parse(localStorage.getItem('favorites')) || []
@@ -40,10 +40,10 @@ function getClassByRate(vote) {
   }
 }
 
-// const topPremiersOfMonth = document.getElementById('topPremiersOfMonth')
-// topPremiersOfMonth.addEventListener('click', () => {
-//   getMovies(PREMIERS)
-// })
+const topPremiersOfMonth = document.getElementById('topPremiersOfMonth')
+topPremiersOfMonth.addEventListener('click', () => {
+  getMovies(PREMIERS)
+})
 
 const topAwaitFilms = document.getElementById('topAwaitFilms')
 topAwaitFilms.addEventListener('click', () => {
@@ -67,8 +67,8 @@ function showMovies(data) {
 
   document.querySelector('.movies').innerHTML = ''
 
-  if (data.films) {
-    data.films.forEach((movie) => {
+  if (data.items) {
+    data.items.forEach((movie) => {
       const movieEl = document.createElement('div')
       movieEl.classList.add('movie')
       movieEl.innerHTML = `
@@ -86,11 +86,11 @@ function showMovies(data) {
             (genre) => ` ${genre.genre}`
           )}</div>
           ${
-            movie.rating &&
+            movie.ratingKinopoisk &&
             `
           <div class="movie__average movie__average--${getClassByRate(
-            movie.rating
-          )}">${movie.rating}</div>
+            movie.ratingKinopoisk
+          )}">${movie.ratingKinopoisk}</div>
           `
           }
         </div>
