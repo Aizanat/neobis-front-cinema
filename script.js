@@ -20,15 +20,25 @@ function saveFavorite(movieId) {
   if (!favorites.includes(movieId)) {
     favorites.push(movieId)
     localStorage.setItem('favorites', JSON.stringify(favorites))
+    console.log('вызвался saveFavorite')
   }
 }
 
-// Функция для удаления фильма из избранного в локальном хранилище
+// Функция для удаления фильма из избранного в локальном хранилище по его id
 function removeFavorite(movieId) {
   const index = favorites.indexOf(movieId)
   if (index !== -1) {
     favorites.splice(index, 1)
     localStorage.setItem('favorites', JSON.stringify(favorites))
+    console.log('Фильм успешно удален из избранного')
+
+    // Удаление элемента из DOM
+    const movieEl = document.querySelector(`.movie[data-movie-id="${movieId}"]`)
+    if (movieEl) {
+      movieEl.remove()
+    }
+  } else {
+    console.log('Фильм c указанным id не найден в избранном')
   }
 }
 
@@ -86,119 +96,7 @@ function showMovies(data) {
           <div class="movie_content-favorite">
             <img
               class="favorite-btn"
-              data-kinopoisk-id="${movieId}" 
-              src="${
-                isFavoriteMovie ? 'img/heart__red.png' : 'img/heart__white.png'
-              }"
-              alt="logo_favorite"
-            >
-          </div>
-        </div>
-        <div class="movie__info">
-          <div class="movie__title">${movie.nameRu}</div>
-          <div class="movie__category">${
-            movie.genres
-              ? movie.genres.map((genre) => ` ${genre.genre}`).join('')
-              : ''
-          }</div>
-          ${
-            movie.ratingKinopoisk
-              ? `<div class="movie__average movie__average--${getClassByRate(
-                  movie.ratingKinopoisk
-                )}">${movie.ratingKinopoisk}</div>`
-              : ''
-          }
-        </div>
-      `
-      moviesEl.appendChild(movieEl)
-
-      // Добавляем обработчик события для кнопки избранного
-      const favoriteButton = movieEl.querySelector('.favorite-btn')
-      favoriteButton.addEventListener('click', toggleFavorite)
-    })
-  } else {
-    moviesEl.innerHTML = '<p>No movies found</p>'
-  }
-}
-function showMovies(data) {
-  const moviesEl = document.querySelector('.movies')
-  moviesEl.innerHTML = ''
-
-  if (data.items) {
-    data.items.forEach((movie) => {
-      const movieEl = document.createElement('div')
-      movieEl.classList.add('movie')
-      const movieId = movie.kinopoiskId || movie.filmId
-      const isFavoriteMovie = isFavorite(movieId)
-
-      movieEl.innerHTML = `
-        <div class="movie__cover-inner">
-          <img
-            src="${movie.posterUrlPreview}"
-            class="movie__cover"
-            alt="${movie.nameRu}"
-          />
-          <div class="movie__cover--darkened"></div>
-          <div class="movie_content-favorite">
-            <img
-              class="favorite-btn"
-              data-kinopoisk-id="${movieId}" 
-              src="${
-                isFavoriteMovie ? 'img/heart__red.png' : 'img/heart__white.png'
-              }"
-              alt="logo_favorite"
-            >
-          </div>
-        </div>
-        <div class="movie__info">
-          <div class="movie__title">${movie.nameRu}</div>
-          <div class="movie__category">${
-            movie.genres
-              ? movie.genres.map((genre) => ` ${genre.genre}`).join('')
-              : ''
-          }</div>
-          ${
-            movie.ratingKinopoisk
-              ? `<div class="movie__average movie__average--${getClassByRate(
-                  movie.ratingKinopoisk
-                )}">${movie.ratingKinopoisk}</div>`
-              : ''
-          }
-        </div>
-      `
-      moviesEl.appendChild(movieEl)
-
-      // Добавляем обработчик события для кнопки избранного
-      const favoriteButton = movieEl.querySelector('.favorite-btn')
-      favoriteButton.addEventListener('click', toggleFavorite)
-    })
-  } else {
-    moviesEl.innerHTML = '<p>No movies found</p>'
-  }
-}
-function showMovies(data) {
-  const moviesEl = document.querySelector('.movies')
-  moviesEl.innerHTML = ''
-
-  if (data.items) {
-    data.items.forEach((movie) => {
-      const movieEl = document.createElement('div')
-      movieEl.classList.add('movie')
-      const movieId = movie.kinopoiskId || movie.filmId
-      const isFavoriteMovie = isFavorite(movieId)
-
-      movieEl.innerHTML = `
-        <div class="movie__cover-inner">
-          <img
-            src="${movie.posterUrlPreview}"
-            class="movie__cover"
-            alt="${movie.nameRu}"
-          />
-          <div class="movie__cover--darkened"></div>
-          <div class="movie_content-favorite">
-            <img
-              class="favorite-btn"
-              data-kinopoisk-id="${movieId}" 
+              data-kinopoisk-id="${movieId}"
               src="${
                 isFavoriteMovie ? 'img/heart__red.png' : 'img/heart__white.png'
               }"
